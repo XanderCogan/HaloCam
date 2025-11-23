@@ -106,10 +106,32 @@ class MainViewController: UIViewController {
     }
 
     private func setupVoiceControl() {
-        voiceController.onIntentDetected = { [weak self] intent in
+        voiceController.onIntentDetected = { [weak self] rawText, intent in
             guard let self = self else { return }
-            self.statusLabel.text = "Intent: \(intent)"
+            // Show raw recognized text first
+            self.statusLabel.text = "Heard: \(rawText)"
+            
+            // After a brief delay, show the parsed intent
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                self.statusLabel.text = "Command: \(intent)"
+            }
+            
+            // Execute the command
             self.droneController.handle(intent: intent)
+        }
+        
+        droneController.onCommandStarted = { [weak self] intent in
+            guard let self = self else { return }
+            self.statusLabel.text = "Executing: \(intent)..."
+        }
+        
+        droneController.onCommandCompleted = { [weak self] intent, error in
+            guard let self = self else { return }
+            if let error = error {
+                self.statusLabel.text = "Error: \(intent) - \(error.localizedDescription)"
+            } else {
+                self.statusLabel.text = "Completed: \(intent)"
+            }
         }
     }
 

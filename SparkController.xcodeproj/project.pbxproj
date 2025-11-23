@@ -11,6 +11,9 @@
 		99067B09AB0E54B8C489DEBD /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = BDA6852685CAB0B29B0A2C74 /* LaunchScreen.storyboard */; };
 		D3F6F7D9F01056987AD8D381 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = BDD42458E205CC7A0C3DCEEB /* AppDelegate.swift */; };
 		F92A165BA9D0842863A9FF55 /* MainViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 869888A0EABA0DC95C710BC5 /* MainViewController.swift */; };
+		A1B2C3D4E5F6A7B8C9D0E1F2 /* VoiceCommandController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2C3D4E5F6A7B8C9D0E1F2A3 /* VoiceCommandController.swift */; };
+		C3D4E5F6A7B8C9D0E1F2A3B4 /* DroneController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8C9D0E1F2A3B4C5 /* DroneController.swift */; };
+		E5F6A7B8C9D0E1F2A3B4C5D6 /* DroneIntent.swift in Sources */ = {isa = PBXBuildFile; fileRef = F6A7B8C9D0E1F2A3B4C5D6E7 /* DroneIntent.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -19,9 +22,12 @@
 		75563D4F72D9770C736CB2D5 /* Pods-SparkController.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkController.debug.xcconfig"; path = "Target Support Files/Pods-SparkController/Pods-SparkController.debug.xcconfig"; sourceTree = "<group>"; };
 		869888A0EABA0DC95C710BC5 /* MainViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MainViewController.swift; sourceTree = "<group>"; };
 		9F9332B9E9D553261178A6E3 /* Pods_SparkController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_SparkController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B2C3D4E5F6A7B8C9D0E1F2A3 /* VoiceCommandController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceCommandController.swift; sourceTree = "<group>"; };
 		BDA6852685CAB0B29B0A2C74 /* LaunchScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = LaunchScreen.storyboard; sourceTree = "<group>"; };
 		BDD42458E205CC7A0C3DCEEB /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		D4E5F6A7B8C9D0E1F2A3B4C5 /* DroneController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneController.swift; sourceTree = "<group>"; };
 		D81DCA47868E979397FC90A6 /* Pods-SparkController.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-SparkController.release.xcconfig"; path = "Target Support Files/Pods-SparkController/Pods-SparkController.release.xcconfig"; sourceTree = "<group>"; };
+		F6A7B8C9D0E1F2A3B4C5D6E7 /* DroneIntent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DroneIntent.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +77,9 @@
 				711A2BC0AE8F82081F2BC360 /* Info.plist */,
 				BDA6852685CAB0B29B0A2C74 /* LaunchScreen.storyboard */,
 				869888A0EABA0DC95C710BC5 /* MainViewController.swift */,
+				B2C3D4E5F6A7B8C9D0E1F2A3 /* VoiceCommandController.swift */,
+				D4E5F6A7B8C9D0E1F2A3B4C5 /* DroneController.swift */,
+				F6A7B8C9D0E1F2A3B4C5D6E7 /* DroneIntent.swift */,
 			);
 			path = SparkController;
 			sourceTree = "<group>";
@@ -216,6 +225,9 @@
 			files = (
 				D3F6F7D9F01056987AD8D381 /* AppDelegate.swift in Sources */,
 				F92A165BA9D0842863A9FF55 /* MainViewController.swift in Sources */,
+				A1B2C3D4E5F6A7B8C9D0E1F2 /* VoiceCommandController.swift in Sources */,
+				C3D4E5F6A7B8C9D0E1F2A3B4 /* DroneController.swift in Sources */,
+				E5F6A7B8C9D0E1F2A3B4C5D6 /* DroneIntent.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

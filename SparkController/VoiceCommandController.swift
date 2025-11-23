@@ -16,9 +16,11 @@ final class VoiceCommandController: NSObject {
     private let audioSession = AVAudioSession.sharedInstance()
     
     /// Called on main thread when we successfully map a command.
-    var onIntentDetected: ((DroneIntent) -> Void)?
+    /// Parameters: (rawText: String, intent: DroneIntent)
+    var onIntentDetected: ((String, DroneIntent) -> Void)?
     
     private(set) var isListening: Bool = false
+    private var isStopping: Bool = false
     
     // MARK: - Public
     
@@ -48,20 +50,19 @@ final class VoiceCommandController: NSObject {
     func stopListening() {
         if !isListening { return }
         
+        // Mark that we're stopping - this tells the completion handler to process any result
+        isStopping = true
+        
+        // Stop capturing new audio
         audioEngine.stop()
         audioEngine.inputNode.removeTap(onBus: 0)
+        
+        // Signal that no more audio is coming - this triggers finalization
         recognitionRequest?.endAudio()
-        recognitionTask?.cancel()
         
-        recognitionRequest = nil
-        recognitionTask = nil
+        // DON'T cancel the task here - let it finalize naturally
+        // The completion handler will clean up when it gets the final result
         isListening = false
-        
-        do {
-            try audioSession.setActive(false, options: .notifyOthersOnDeactivation)
-        } catch {
-            print("Failed to deactivate audio session: \(error)")
-        }
     }
     
     // MARK: - Private
@@ -70,6 +71,7 @@ final class VoiceCommandController: NSObject {
         // Cleanup any existing session
         recognitionTask?.cancel()
         recognitionTask = nil
+        isStopping = false
         
         // Configure audio session for recording
         try audioSession.setCategory(.record, mode: .measurement, options: .duckOthers)
@@ -100,23 +102,38 @@ final class VoiceCommandController: NSObject {
         recognitionTask = speechRecognizer?.recognitionTask(with: recognitionRequest) { [weak self] result, error in
             guard let self = self else { return }
             
-            var isFinal = false
-            
+            // Process result if it's final OR if we're stopping (even if not marked final)
             if let result = result {
-                isFinal = result.isFinal
+                let text = result.bestTranscription.formattedString
+                
                 if result.isFinal {
-                    let text = result.bestTranscription.formattedString
+                    self.handleRecognizedText(text)
+                } else if self.isStopping && !text.isEmpty {
+                    // We stopped listening, so process this as the final result
                     self.handleRecognizedText(text)
                 }
             }
             
-            if error != nil || isFinal {
+            // Handle errors - but also check if we got a result even if not final
+            if let error = error {
+                print("Recognition error: \(error.localizedDescription)")
+                // Even on error, try to process any text we got
+                if let result = result, !result.bestTranscription.formattedString.isEmpty {
+                    self.handleRecognizedText(result.bestTranscription.formattedString)
+                }
+            }
+            
+            // Clean up when we get a final result, error, or when we've stopped listening
+            let shouldCleanup = error != nil || (result?.isFinal ?? false) || self.isStopping
+            
+            if shouldCleanup {
                 self.audioEngine.stop()
                 inputNode.removeTap(onBus: 0)
                 
                 self.recognitionRequest = nil
                 self.recognitionTask = nil
                 self.isListening = false
+                self.isStopping = false
                 
                 do {
                     try self.audioSession.setActive(false, options: .notifyOthersOnDeactivation)
@@ -131,7 +148,7 @@ final class VoiceCommandController: NSObject {
         print("Recognized: \(text)")
         if let intent = DroneIntentParser.parse(text: text) {
             DispatchQueue.main.async {
-                self.onIntentDetected?(intent)
+                self.onIntentDetected?(text, intent)
             }
         } else {
             print("No intent matched for: \(text)")
