@@ -26,6 +26,10 @@
 	<string>Used to connect to DJI products via WiFi</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>Used to show your location on the map</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>Voice control for the drone.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>Needed to capture voice commands.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

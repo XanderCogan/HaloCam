@@ -10,6 +10,9 @@ class MainViewController: UIViewController {
     private var isFlying = false
     #endif
 
+    private let voiceController = VoiceCommandController()
+    private let droneController = DroneController()
+
     private let statusLabel: UILabel = {
         let label = UILabel()
         label.text = "Disconnected"
@@ -39,10 +42,21 @@ class MainViewController: UIViewController {
         return button
     }()
 
+    private let micButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle("🎤 HOLD TO SPEAK", for: .normal)
+        button.titleLabel?.font = .systemFont(ofSize: 20, weight: .semibold)
+        button.backgroundColor = .systemPurple
+        button.setTitleColor(.white, for: .normal)
+        button.layer.cornerRadius = 12
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupNotifications()
+        setupVoiceControl()
 
         #if targetEnvironment(simulator)
         // Auto-connect in simulator after 1 second
@@ -62,9 +76,9 @@ class MainViewController: UIViewController {
         simLabel.textColor = .systemOrange
         simLabel.textAlignment = .center
 
-        let stack = UIStackView(arrangedSubviews: [simLabel, statusLabel, takeoffButton, landButton])
+        let stack = UIStackView(arrangedSubviews: [simLabel, statusLabel, micButton, takeoffButton, landButton])
         #else
-        let stack = UIStackView(arrangedSubviews: [statusLabel, takeoffButton, landButton])
+        let stack = UIStackView(arrangedSubviews: [statusLabel, micButton, takeoffButton, landButton])
         #endif
 
         stack.axis = .vertical
@@ -76,14 +90,27 @@ class MainViewController: UIViewController {
         NSLayoutConstraint.activate([
             stack.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             stack.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            micButton.widthAnchor.constraint(equalToConstant: 200),
+            micButton.heightAnchor.constraint(equalToConstant: 60),
             takeoffButton.widthAnchor.constraint(equalToConstant: 200),
             takeoffButton.heightAnchor.constraint(equalToConstant: 60),
             landButton.widthAnchor.constraint(equalToConstant: 200),
             landButton.heightAnchor.constraint(equalToConstant: 60)
         ])
 
+        micButton.addTarget(self, action: #selector(micButtonTouchDown), for: .touchDown)
+        micButton.addTarget(self, action: #selector(micButtonTouchUp), for: .touchUpInside)
+        micButton.addTarget(self, action: #selector(micButtonTouchUp), for: .touchUpOutside)
         takeoffButton.addTarget(self, action: #selector(takeoff), for: .touchUpInside)
         landButton.addTarget(self, action: #selector(land), for: .touchUpInside)
+    }
+
+    private func setupVoiceControl() {
+        voiceController.onIntentDetected = { [weak self] intent in
+            guard let self = self else { return }
+            self.statusLabel.text = "Intent: \(intent)"
+            self.droneController.handle(intent: intent)
+        }
     }
 
     private func setupNotifications() {
@@ -183,6 +210,16 @@ class MainViewController: UIViewController {
             }
         }
         #endif
+    }
+
+    @objc private func micButtonTouchDown(_ sender: UIButton) {
+        statusLabel.text = "Listening..."
+        voiceController.startListening()
+    }
+
+    @objc private func micButtonTouchUp(_ sender: UIButton) {
+        voiceController.stopListening()
+        statusLabel.text = "Stopped listening"
     }
 
     private func showAlert(_ title: String, message: String) {
