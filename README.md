@@ -79,9 +79,36 @@ If you see "Untrusted Developer":
 
 ## Usage
 
+### Manual Controls
+
 - Wait for **"Connected"** status
 - Press **TAKEOFF** - Spark ascends to ~1.2m and hovers
 - Press **LAND** - Spark descends and lands
+
+### Voice Commands
+
+The app supports voice control for hands-free operation. Hold the **🎤 HOLD TO SPEAK** button and speak one of the following commands:
+
+#### Available Voice Commands
+
+| Command | What It Does |
+|---------|--------------|
+| **"take off"** / **"takeoff"** / **"lift off"** / **"launch"** | Initiates takeoff sequence |
+| **"land"** | Initiates landing sequence |
+| **"take a photo"** / **"take photo"** / **"take a picture"** / **"take picture"** / **"snapshot"** | Captures a single photo (saved to drone's SD card) |
+| **"photo position"** / **"selfie position"** / **"selfie mode"** | Executes automated routine: takes off → climbs to 3m → takes a photo → hovers |
+
+#### How to Use Voice Commands
+
+1. Ensure the drone is connected (status shows "Connected")
+2. Press and **hold** the microphone button (🎤 HOLD TO SPEAK)
+3. Speak your command clearly
+4. Release the button when finished
+5. The status label will show "Listening..." while active, then display the detected intent
+
+**Note:** Voice commands require microphone and speech recognition permissions. The app will prompt you on first use.
+
+**Emergency:** The manual TAKEOFF and LAND buttons remain available at all times for emergency situations.
 
 ## Troubleshooting
 
