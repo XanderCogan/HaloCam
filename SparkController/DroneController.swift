@@ -173,7 +173,7 @@ final class DroneController {
         
         // Stop and clear previous timeline if any
         missionControl.stopTimeline()
-        missionControl.unscheduleAllElements()
+        missionControl.unscheduleEverything()
         
         var elements: [DJIMissionControlTimelineElement] = []
         
@@ -182,8 +182,9 @@ final class DroneController {
         elements.append(takeoff)
         
         // 2) Go to fixed altitude (meters, relative to takeoff)
-        let goToAltitude = DJIGoToAction(altitude: 3.0)
-        elements.append(goToAltitude)
+        if let goToAltitude = DJIGoToAction(altitude: 3.0) {
+            elements.append(goToAltitude)
+        }
         
         // 3) Take a single photo
         let shootPhotoAction = DJIShootPhotoAction()
