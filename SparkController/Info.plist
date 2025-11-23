@@ -30,6 +30,8 @@
 	<string>Voice control for the drone.</string>
 	<key>NSMicrophoneUsageDescription</key>
 	<string>Needed to capture voice commands.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>Save photos captured by the drone to your photo library.</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>
